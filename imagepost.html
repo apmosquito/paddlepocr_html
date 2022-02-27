@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!--
+	<link href=".\contentFiles\Content\bootstrap.min.css" rel="stylesheet">
+	-->
+	<link rel="stylesheet" href=".\contentFiles\Content\bootstrap.min.css">
+	<script src=".\contentFiles\Scripts\jquery-3.4.1.min.js"></script>
+    <script src=".\contentFiles\Scripts\bootstrap.min.js"></script>
+	<meta charset="UTF-8">
+	<title>切换图片</title>
+	<style type="text/css">
+		body{
+			text-align: center;
+		}
+
+		.text{
+			width: 220px;
+			height: 100px;
+			border: 1px solid #000;
+			margin: 10px auto;
+		}
+		.textword{
+			width: 400px;
+			height: 600px;
+			border: 1px solid #000;
+			margin: 10px auto;
+		}
+		 .upload{
+
+			padding: 4px 10px;
+
+			height: 40px;
+
+			position: relative;
+
+		}
+		.img{
+			width: 350px;
+			height: 350px;
+			border: 1px solid #000;
+			margin: 0 auto;
+
+		}
+		 .autoimg{
+			height:320px;
+			width:320px;
+			background-size:cover;
+		}
+		.change{
+
+			position: absolute;
+
+			overflow: hidden;
+
+			right: 0;
+
+			top: 0;
+
+			opacity: 0;
+
+		}
+	</style>
+</head>
+<body>
+<div class="container">
+	<div class="row" style="height:40px">
+	</div>
+	<div class="row" >
+		<div class="col-lg-12">
+			<div>
+			<button type="button" class="btn btn-primary btn-lg" style="font-size: 60px">
+				<span class="glyphicon glyphicon-user"></span>本页面由人工智能工程化实验室提供
+			</button>
+			</div>
+		</div>
+	</div>
+	<div class="row" style="height:60px">
+	</div>
+   <div class="row" >
+      <div class="col-lg-5"
+         style="background-color: #dedef8;box-shadow:
+         inset 1px -1px 1px #444, inset -1px 1px 1px #444; height:800px">
+		  <div>
+				 <form enctype="multipart/form-data" id="addShowForm">
+							<div>
+								<a type="button" class="upload" id="up_btn"></a>
+								<input name="icon" type="file" accept="image/*" class="upload btn btn-warning" id="icon" onchange="uploadClick()">
+							</div>
+				 </form>
+		  </div>
+
+		  <div>
+        	<h1>显示图片</h1>
+			<div id="img" class="img-thumbnail img">
+				<img id="showImg" src="" alt="" width="50" class="autoimg">
+			</div>
+		  </div>
+      </div>
+	  <div class="col-lg-2">
+		  <a href="#" class="btn btn-info btn-lg" style="margin:250px 0px" onclick="add()">
+          	<span class="glyphicon glyphicon-circle-arrow-right"></span> 点我开始翻译
+        </a>
+	  </div>
+	  <div class="col-lg-5"
+			 style="background-color: #dedef8;box-shadow:
+			 inset 1px -1px 1px #444, inset -1px 1px 1px #444; height:800px">
+
+			<div id="clickdiv" class="btn btn-primary">翻译结果</div>
+
+
+				<div id="wordshtml" style="width:500px;height:700px;">
+					<input type="text" id="show_words" class='textword' value="翻译以后的文字在这显示：" style="width:400px;height:700px;margin:30px;">
+				</div>
+
+		  </div>
+	   </div>
+	</div>
+</div>
+
+
+
+
+	<div id="text1" class="text">
+		 <div class="file">
+
+		 </div>
+	</div>
+	<script type="text/javascript">
+		function uploadClick(){
+			 var reader = new FileReader();
+			 reader.readAsDataURL(document.getElementById("icon").files[0]);
+			 reader.onload = function(e){
+			 	 $("#showImg").attr("src",e.target.result);
+			 }
+
+		}
+
+		//debugger
+		function add(){
+			console.log("123++++++++++++++");
+			var urlpaddle = "http://127.0.0.1:5000/uploadfile";
+			var files = document.getElementById("icon");
+			//此处将所以表单数据全部收集到啦
+			var file = new FormData();
+			file.append("file", files.files[0]);
+			//imgSrc = getObjectURL(files);
+			$.ajax({
+				 "url": urlpaddle,
+				  type: "post",
+				  data: file,
+				  cache: false,
+				  contentType: false,
+				  processData: false,
+				  success: function (data) {
+				  	$(".textword").css('display','none');
+				  	$("#wordshtml").html(data);
+				   },
+				  error: function (status) {
+				   }
+			  });
+		}
+		/*
+		function getObjectURL(file) {
+			var url = null ;
+			if (window.createObjectURL!=undefined) { // basic
+				url = window.createObjectURL(file) ;
+			} else if (window.URL!=undefined) { // mozilla(firefox)
+				url = window.URL.createObjectURL(file) ;
+			} else if (window.webkitURL!=undefined) { // webkit or chrome
+				url = window.webkitURL.createObjectURL(file) ;
+			}
+			return url ;
+		}
+		*/
+		var formData = new FormData();
+		formData.append('title',this.title);
+		formData.append('type',this.type);
+		formData.append('ID',this.ID);
+		formData.append('icon',$('#icon')[0].files[0]); //注意图片的正确获取方式
+
+
+		$.ajax({
+			"url":'',
+			type: "POST",
+			data:formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function(data) {
+
+			},
+			error: function(status) {}
+
+		})
+
+
+	</script>
+</body>
+</html>
+
